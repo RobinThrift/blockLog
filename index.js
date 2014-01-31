@@ -25,15 +25,15 @@ var bricksNlogs = {
     },
 
     info: function() {
-        this.log('info', _.toArray(arguments));
+        this.log('info', Array.prototype.slice.call(arguments, 0));
     },
 
     warning: function() {
-        this.log('warning', _.toArray(arguments));
+        this.log('warning', Array.prototype.slice.call(arguments, 0));
     },
 
     error: function() {
-        this.log('error', _.toArray(arguments));
+        this.log('error', Array.prototype.slice.call(arguments, 0));
     },
 
     attach: function(listener, type) {

@@ -9,14 +9,13 @@ describe('blocksNlogs logging lib', function() {
     describe('test base functions:', function() {
         it('should pipe to stdout', function(done) {
 
-            process.stdout.on('pipe', function(src) {
-                (bnl._s === src).should.be.ok;
+            process.stdout.once('pipe', function(src) {
                 done();
             });
 
-            bnl.attach(process.stdout);
+            bnl.attach(process.stdout, 'txt');
 
-            bnl.info('test', 'blub');
+            bnl.info('blub');
         });
 
         it('should pipe to a file', function(done) {
@@ -25,9 +24,9 @@ describe('blocksNlogs logging lib', function() {
 
             var ws = fs.createWriteStream('test/fixtures/test.txt', {encoding: 'utf8'});
 
-            bnl.attach(ws);
+            bnl.attach(ws, 'json');
 
-            ws.once('finish', function(src) {
+            ws.once('finish', function() {
                 var fixt = fs.readFileSync('test/fixtures/fixt.txt', {encoding: 'utf8'}),
                     res  = fs.readFileSync('test/fixtures/test.txt', {encoding: 'utf8'});
 

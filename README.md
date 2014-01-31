@@ -8,6 +8,7 @@ A simple and adaptable stream-based logging lib for node.js
 - [Usage](#usage)
 - [API](#api)
 - [ROADMAP](#roadmap)
+- [License](#license)
 
 
 ##Installation
@@ -102,7 +103,13 @@ The internal method used to log to the stream. Accepts a log level and an array 
 - [Koa.js](http://koajs.com/) compatible
 
 
+---
 
+##License
+
+MIT
+
+(C) 2014 Robin Thrift
 
 
 

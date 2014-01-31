@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/RobinThrift/blocksNlogs.png?branch=master)](https://travis-ci.org/RobinThrift/blocksNlogs)
-#blocks 'n' logs
+[![Build Status](https://travis-ci.org/RobinThrift/blockLog.png?branch=master)](https://travis-ci.org/RobinThrift/blockLog)
+#blockLog
 A simple and adaptable stream-based logging lib for node.js
 
 
@@ -11,28 +11,28 @@ A simple and adaptable stream-based logging lib for node.js
 
 ##Installation
 Simply install via **npm**:   
-`npm install --save-dev blocks 'n' logs`
+`npm install --save-dev blocklog`
 
 ##Usage
 
 First of all require it:  
-`var log = require('blocksNlogs');`
+`var log = require('blocklog');`
 
 Then you will need to attach an adapter to stream to. This must be a writeable stream, like `process.stdout` or a writeable file stream using `fs.createWriteStream`. 
 
 For most streams you will also need to specify the logging type. At the moment there are three logging types:
 
 - **raw**: The raw input data will be piped through
-- **txt**: `blocks 'n' logs` will nicely format the logging message into a nice string for you (as `[LEVEL] MSG"`)
+- **txt**: `blockLog` will nicely format the logging message into a nice string for you (as `[LEVEL] MSG"`)
 - **json**: The data will be passed as JSON strings. Useful when you want to read the data later, without complicated parsing.
 
-> NOTE: When using the **txt** or **json** format `blocks 'n' logs` will append a `\n` at the end of the formatted string.
+> NOTE: When using the **txt** or **json** format `blockLog` will append a `\n` at the end of the formatted string.
 
 
 Once you have attached a stream (you may attach more than one, at any time) you can start logging:
 
 ```js  
-var log = require('blocksNlogs');
+var log = require('blocklog');
 
 log.attach(process.stdout, 'txt');
 
@@ -60,7 +60,7 @@ log.info('Hello File');
 ```
 
 ##Usage with [Express.js](http://expressjs.com/api.html#app.use)
-`blocks 'n' logs` comes with a middleware wrapper for `express.js` applications.
+`blockLog` comes with a middleware wrapper for `express.js` applications.
 
 ```js
 //...

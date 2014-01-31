@@ -1,6 +1,6 @@
 var es = require('event-stream');
 
-var bricksNlogs = {
+var blockLog = {
     _s: es.pause(),
 
     jsonStream: es.stringify,
@@ -76,4 +76,4 @@ var bricksNlogs = {
 
 
 
-module.exports = bricksNlogs;
+module.exports = blockLog;

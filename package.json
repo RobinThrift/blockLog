@@ -1,6 +1,6 @@
 {
-  "name": "blocksNlogs",
   "version": "0.1.0",
+  "name": "blocklog",
   "description": "A simple and adaptable stream-based logging lib for node.js",
   "main": "index.js",
   "scripts": {

@@ -1,17 +1,20 @@
 {
-  "version": "0.1.0",
   "name": "blocklog",
+  "version": "0.2.0",
   "description": "A simple and adaptable stream-based logging lib for node.js",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
   },
-  "repository": "",
+  "homepage": "https://github.com/RobinThrift/blocklog",
+  "issues": "https://github.com/RobinThrift/blocklog/issues",
+  "repository": "https://github.com/RobinThrift/blocklog.git",
   "keywords": [
     "logger",
     "logging",
     "log",
-    "stream"
+    "stream",
+    "express"
   ],
   "author": "Robin Thrift",
   "license": "MIT",

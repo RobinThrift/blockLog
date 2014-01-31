@@ -52,6 +52,25 @@ var bricksNlogs = {
     },
 
 
+    middleware: function() {
+
+        var self = this;
+
+        self.attach(process.stdout, 'txt');
+
+        return function(req, res, next) {
+            var ip       = req.ip,
+            method   = req.method,
+            path     = req.path,
+            protocol = req.protocol,
+            isXHR    = req.xhr,
+            date     = new Date();
+
+            self.info(date + ' (' + ip + ') – [' + protocol + '] ' + method.toUpperCase() + ' ' + path + ' (XHR: ' + isXHR + ')');
+
+            next();
+        }
+
     }
 };
 

@@ -1,5 +1,4 @@
-var _  = require('lodash'),
-    es = require('event-stream');
+var es = require('event-stream');
 
 var bricksNlogs = {
     _s: es.pause(),
@@ -9,7 +8,7 @@ var bricksNlogs = {
     },
 
     log: function(level, msgs) {
-        _.each(msgs, function(msg) {
+        msgs.forEach(function(msg) {
             this.write({
                 level: level,
                 msg: msg

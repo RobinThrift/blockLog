@@ -21,6 +21,14 @@ var bricksNlogs = {
         this.log('info', _.toArray(arguments));
     },
 
+    warning: function() {
+        this.log('warning', _.toArray(arguments));
+    },
+
+    error: function() {
+        this.log('error', _.toArray(arguments));
+    },
+
     attach: function(listener) {
         this._s.pipe(listener);
     }

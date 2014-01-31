@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/RobinThrift/blockLog.png?branch=master)](https://travis-ci.org/RobinThrift/blockLog)
+[![NPM version](https://badge.fury.io/js/blocklog.png)](http://badge.fury.io/js/blocklog)
 #blockLog
 A simple and adaptable stream-based logging lib for node.js
 

@@ -101,7 +101,8 @@ The internal method used to log to the stream. Accepts a log level and an array 
 - Allow multiple instances
 - [Hapi](http://spumko.github.io/) compatible
 - [Koa.js](http://koajs.com/) compatible
-
+- Maps/Filters
+- custom formatters
 
 ---
 

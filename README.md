@@ -13,7 +13,7 @@ A simple and adaptable stream-based logging lib for node.js
 
 ##Installation
 Simply install via **npm**:   
-`npm install --save-dev blocklog`
+`npm install --save blocklog`
 
 ##Usage
 

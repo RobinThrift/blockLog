@@ -52,7 +52,7 @@ var blockLog = {
     },
 
 
-    middleware: function() {
+    express: function() {
 
         var self = this;
 

@@ -111,7 +111,7 @@ The internal method used to log to the stream. Accepts a log level and an array 
 
 MIT
 
-(C) 2014 Robin Thrift
+&copy; 2014 Robin Thrift
 
 
 

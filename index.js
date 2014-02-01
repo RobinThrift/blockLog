@@ -1,23 +1,31 @@
 var es = require('event-stream');
 
-var blockLog = {
-    _s: es.pause(),
+var blockLog = function(name) {
 
-    jsonStream: es.stringify,
-     
-    txtStream: function () { 
+    this.name = name;
+    this._s = es.through();
+    this._attached = {};
+
+};
+
+
+blockLog.prototype = {
+
+    _jsonStream: es.stringify, 
+
+    _txtStream: function () { 
         return es.map(function(data, cb) { 
             cb(null, '[' + data.level.toUpperCase() + '] ' + data.msg + '\n');
         });
     },
 
-    write: function(data) {
+    _write: function(data) {
         this._s.write(data);
     },
 
     log: function(level, msgs) {
         msgs.forEach(function(msg) {
-            this.write({
+            this._write({
                 level: level,
                 msg: msg
             });
@@ -36,17 +44,23 @@ var blockLog = {
         this.log('error', Array.prototype.slice.call(arguments, 0));
     },
 
-    attach: function(listener, type) {
+    attach: function(name, listener, type) {
+        this._attached[name] = {
+            name: name,
+            stream: listener,
+            type: type
+        };
+
         switch (type) {
             case 'json':
-                this._s.pipe(this.jsonStream()).pipe(listener);
+                this._s.pipe(this._jsonStream()).pipe(listener);
             break;
             case 'raw':
                 this._s.pipe(listener);
             break;
             case 'plain':
             default:
-                this._s.pipe(this.txtStream()).pipe(listener);
+                this._s.pipe(this._txtStream()).pipe(listener);
             break;
         }
     },
@@ -56,10 +70,9 @@ var blockLog = {
 
         var self = this;
 
-        self.attach(process.stdout, 'plain');
+        self.attach('stdout', process.stdout, 'plain');
 
         return function(req, res, next) {
-
             var ip       = req.ip,
                 method   = req.method,
                 path     = req.path,
@@ -74,7 +87,5 @@ var blockLog = {
 
     }
 };
-
-
 
 module.exports = blockLog;

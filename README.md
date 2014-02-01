@@ -36,7 +36,7 @@ Once you have attached a stream (you may attach more than one, at any time) you 
 ```js  
 var log = require('blocklog');
 
-log.attach(process.stdout, 'plain');
+log.attach('stdout', process.stdout, 'plain');
 
 log.info('Hello World');
 
@@ -54,7 +54,7 @@ If you want to log to a file simply open a writeable stream with `fs`:
 var log = require('blocksNlogs'),
     fs  = require('fs');
 
-log.attach(fs.createWriteStream('path/to/file.txt', {encoding: 'uft8'}), 'json');
+log.attach('fileLog', fs.createWriteStream('path/to/file.txt', {encoding: 'uft8'}), 'json');
 
 log.info('Hello File');
 
@@ -77,8 +77,8 @@ Don't forget to attach streams to the logger, otherwise you won't see anything.
 
 ##API
 
-####`attach(stream, type)`
-This method simply accepts a writable stream and the type of data the stream accepts, e. g. plain text (`plain`) or raw data (`raw`).
+####`attach(name, stream, type)`
+The first argument is the name of the stream (used internally and can be used to remove it later one), then a writable stream and the type of data the stream accepts, e. g. plain text (`plain`) or raw data (`raw`).
 
 ####`info(msg...)`
 Logs the parameters to the stream and marks them as info level logs.

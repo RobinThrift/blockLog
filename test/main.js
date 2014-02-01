@@ -46,5 +46,31 @@ describe('blocksNlogs logging lib – ', function() {
     });
 
 
+    describe('framework integration with', function() {
+
+        it('express', function(done) {
+            
+            var log     = new blockLog('express-log-stream'),
+                mockReq = {
+                    ip: '127.0.0.1',
+                    method: 'get',
+                    path: '/',
+                    protocol: 'http',
+                    xhr: false
+                },
+                middleware;
+
+            process.stdout.once('pipe', function() {
+                done();
+            });
+
+            middleware = log.express();
+
+            middleware(mockReq, {}, function() {});
+
+        });
+
+    });
+
 
 });

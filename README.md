@@ -17,8 +17,11 @@ Simply install via **npm**:
 
 ##Usage
 
-First of all require it:  
-`var log = require('blocklog');`
+First of all require it and get a new instance:  
+```js
+var blockLog = require('blocklog'),
+    log      = new blockLog('name');
+```
 
 Then you will need to attach an adapter to stream to. This must be a writeable stream, like `process.stdout` or a writeable file stream using `fs.createWriteStream`. 
 
@@ -34,7 +37,8 @@ For most streams you will also need to specify the logging type. At the moment t
 Once you have attached a stream (you may attach more than one, at any time) you can start logging:
 
 ```js  
-var log = require('blocklog');
+var blockLog = require('blocklog'),
+    log      = new blockLog('name');
 
 log.attach('stdout', process.stdout, 'plain');
 
@@ -51,8 +55,9 @@ log.log('customLogLevel', ['msg1', 'msg2']);
 If you want to log to a file simply open a writeable stream with `fs`:
 
 ```js  
-var log = require('blocksNlogs'),
-    fs  = require('fs');
+var blockLog = require('blocklog'),
+    log      = new blockLog('name');
+    fs       = require('fs');
 
 log.attach('fileLog', fs.createWriteStream('path/to/file.txt', {encoding: 'uft8'}), 'json');
 
@@ -67,7 +72,7 @@ log.info('Hello File');
 ```js
 //...
 
-app.use(log.middleware());
+app.use(log.express());
 
 ```
 Don't forget to attach streams to the logger, otherwise you won't see anything.
@@ -76,6 +81,9 @@ Don't forget to attach streams to the logger, otherwise you won't see anything.
 
 
 ##API
+
+####`new blockLog(name)`
+You can create multiple instances, each with their own set of attached streams, filters, formatters, etc. You may pass in a name to be able to distinguish the instances, if they log to the same stream (like stdout). 
 
 ####`attach(name, stream, type)`
 The first argument is the name of the stream (used internally and can be used to remove it later one), then a writable stream and the type of data the stream accepts, e. g. plain text (`plain`) or raw data (`raw`).

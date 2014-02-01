@@ -59,7 +59,7 @@ var blockLog = {
         self.attach(process.stdout, 'plain');
 
         return function(req, res, next) {
-            var ip       = req.ip,
+            var ip   = req.ip,
             method   = req.method,
             path     = req.path,
             protocol = req.protocol,

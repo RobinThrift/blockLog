@@ -25,10 +25,10 @@ Then you will need to attach an adapter to stream to. This must be a writeable s
 For most streams you will also need to specify the logging type. At the moment there are three logging types:
 
 - **raw**: The raw input data will be piped through
-- **txt**: `blockLog` will nicely format the logging message into a nice string for you (as `[LEVEL] MSG"`)
+- **plain**: `blockLog` will nicely format the logging message into a nice string for you (as `[LEVEL] MSG"`)
 - **json**: The data will be passed as JSON strings. Useful when you want to read the data later, without complicated parsing.
 
-> NOTE: When using the **txt** or **json** format `blockLog` will append a `\n` at the end of the formatted string.
+> NOTE: When using the **plain** or **json** format `blockLog` will append a `\n` at the end of the formatted string.
 
 
 Once you have attached a stream (you may attach more than one, at any time) you can start logging:
@@ -36,7 +36,7 @@ Once you have attached a stream (you may attach more than one, at any time) you 
 ```js  
 var log = require('blocklog');
 
-log.attach(process.stdout, 'txt');
+log.attach(process.stdout, 'plain');
 
 log.info('Hello World');
 
@@ -78,7 +78,7 @@ Don't forget to attach streams to the logger, otherwise you won't see anything.
 ##API
 
 ####`attach(stream, type)`
-This method simply accepts a writable stream and the type of data the stream accepts, e. g. plain text (`txt`) or raw data (`raw`).
+This method simply accepts a writable stream and the type of data the stream accepts, e. g. plain text (`plain`) or raw data (`raw`).
 
 ####`info(msg...)`
 Logs the parameters to the stream and marks them as info level logs.

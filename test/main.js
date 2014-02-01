@@ -13,7 +13,7 @@ describe('blocksNlogs logging lib', function() {
                 done();
             });
 
-            bnl.attach(process.stdout, 'txt');
+            log.attach(process.stdout, 'plain');
 
             bnl.info('blub');
         });

@@ -44,7 +44,7 @@ var blockLog = {
             case 'raw':
                 this._s.pipe(listener);
             break;
-            case 'txt':
+            case 'plain':
             default:
                 this._s.pipe(this.txtStream()).pipe(listener);
             break;
@@ -56,7 +56,7 @@ var blockLog = {
 
         var self = this;
 
-        self.attach(process.stdout, 'txt');
+        self.attach(process.stdout, 'plain');
 
         return function(req, res, next) {
             var ip       = req.ip,

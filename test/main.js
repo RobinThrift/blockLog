@@ -1,30 +1,33 @@
 var should = require('should'),
-    bnl    = require('../'),
+    blockLog    = require('../'),
     fs     = require('fs');
 
 require('mocha');
 
-describe('blocksNlogs logging lib', function() {
+describe('blocksNlogs logging lib – ', function() {
 
-    describe('test base functions:', function() {
+    describe('test base functions – ', function() {
         it('should pipe to stdout', function(done) {
+
+            var log = new blockLog('stdout-log-stream');
 
             process.stdout.once('pipe', function(src) {
                 done();
             });
 
-            log.attach(process.stdout, 'plain');
+            log.attach('stdout', process.stdout, 'plain');
 
-            bnl.info('blub');
+            log.info('blub');
         });
 
         it('should pipe to a file', function(done) {
 
             fs.writeFileSync('test/fixtures/test.txt', '');
 
-            var ws = fs.createWriteStream('test/fixtures/test.txt', {encoding: 'utf8'});
+            var log = new blockLog('file-log-stream'),
+                ws = fs.createWriteStream('test/fixtures/test.txt', {encoding: 'utf8'})
 
-            bnl.attach(ws, 'json');
+            log.attach('testFile', ws, 'json');
 
             ws.once('finish', function() {
                 var fixt = fs.readFileSync('test/fixtures/fixt.txt', {encoding: 'utf8'}),
@@ -34,11 +37,12 @@ describe('blocksNlogs logging lib', function() {
                 done();
             });
 
-            bnl.info('test');
+            log.info('test');
 
             ws.end();
 
         });
+
     });
 
 

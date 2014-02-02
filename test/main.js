@@ -4,7 +4,7 @@ var should = require('should'),
 
 require('mocha');
 
-describe('blocksNlogs logging lib – ', function() {
+describe('blockLog logging lib – ', function() {
 
     describe('test base functions – ', function() {
         it('should pipe to stdout', function(done) {

@@ -6,6 +6,7 @@ var blockLog = function(name) {
     this.name = name;
     this._s = es.through();
     this._attached = {};
+    this._maps = [];
 
 };
 
@@ -77,6 +78,17 @@ blockLog.prototype = {
 
         _ns = this._s.pipe(this._levelMap(levels));
 
+        _.each(this._maps, function(map) {
+            if ((map.levels == 'all' 
+                    || map.levels == levels 
+                    || _.intersection(map.levels, levels)) 
+                    && (map.type == type
+                    || map.type == 'all')) {
+                _ns = _ns.pipe(map.fn());
+            }
+        });
+
+        
         switch (type) {
             case 'json':
                 _ns = _ns.pipe(this._jsonStream());
@@ -90,6 +102,30 @@ blockLog.prototype = {
         _ns.pipe(listener);
     },
 
+
+
+    addMap: function(mapFn, opts) {
+        var defaults = {
+                type: 'all',
+                levels: 'all'
+            },
+            map;
+
+        map = _.defaults(defaults, opts);
+
+        this._s = es.through();
+
+        map.fn = function() {return es.map(mapFn);};
+
+        this._maps.push(map);
+
+        _.each(this._attached, function(_s) {
+
+            this.attach(_s.name, _s.stream, _s);
+
+        }.bind(this));
+
+    },
 
     express: function() {
 

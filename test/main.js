@@ -48,6 +48,43 @@ describe('blockLog logging lib – ', function() {
     });
 
 
+
+    describe('advanced features – ', function() {
+
+        it('custom map', function(done) {
+
+            fs.writeFileSync('test/fixtures/maptest.txt', '');
+
+            var log = new blockLog('custom-formatter-log-stream'),
+                ws = fs.createWriteStream('test/fixtures/maptest.txt', {encoding: 'utf8'});
+
+            log.attach('testFile', ws, {
+                type: 'plain'
+            });
+
+            log.addMap(function(data, cb) {
+                data.msg += 10;
+                cb(null, data);
+            }, 'plain');
+
+            ws.once('finish', function() {
+                var fixt = '[INFO] 20\n',
+                    res  = fs.readFileSync('test/fixtures/maptest.txt', {encoding: 'utf8'});
+
+                res.should.be.equal(fixt);
+                done();
+            });
+
+            log.info(10);
+
+            ws.end();
+
+
+        });
+
+    });
+
+
     describe('framework integration with', function() {
 
         it('express', function(done) {

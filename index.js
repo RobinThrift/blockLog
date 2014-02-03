@@ -14,9 +14,25 @@ blockLog.prototype = {
 
     _jsonStream: es.stringify, 
 
+    _levelMap: function(levels) {
+        return es.map(function(data, cb) {
+            var _l = data.level.toLowerCase();
+            if (levels == 'all' || levels == _l || _.contains(levels, _l)) {
+                cb(null, data);
+            } else {
+                cb();
+            }
+        });
+    },
+
+    plainFormat: function(data) {
+        return '[' + data.level.toUpperCase() + '] ' + JSON.stringify(data.msg) + '\n';
+    },
+
     _txtStream: function () { 
+        var self = this;
         return es.map(function(data, cb) { 
-            cb(null, '[' + data.level.toUpperCase() + '] ' + data.msg + '\n');
+            cb(null, self.plainFormat(data));
         });
     },
 
@@ -25,7 +41,7 @@ blockLog.prototype = {
     },
 
     log: function(level, msgs) {
-        msgs.forEach(function(msg) {
+        _.each(msgs, function(msg) {
             this._write({
                 level: level,
                 msg: msg
@@ -34,36 +50,44 @@ blockLog.prototype = {
     },
 
     info: function() {
-        this.log('info', Array.prototype.slice.call(arguments, 0));
+        this.log('info', _.toArray(arguments));
     },
 
     warning: function() {
-        this.log('warning', Array.prototype.slice.call(arguments, 0));
+        this.log('warning', _.toArray(arguments));
     },
 
     error: function() {
-        this.log('error', Array.prototype.slice.call(arguments, 0));
+        this.log('error', _.toArray(arguments));
     },
 
-    attach: function(name, listener, type) {
+    attach: function(name, listener, opts) {
+        var o      = opts || {},
+            type   = o.type || 'plain',
+            levels = o.levels || 'all',
+            _ns;
+
         this._attached[name] = {
             name: name,
             stream: listener,
-            type: type
+            type: type,
+            levels: levels
         };
+
+
+        _ns = this._s.pipe(this._levelMap(levels));
 
         switch (type) {
             case 'json':
-                this._s.pipe(this._jsonStream()).pipe(listener);
-            break;
-            case 'raw':
-                this._s.pipe(listener);
+                _ns = _ns.pipe(this._jsonStream());
             break;
             case 'plain':
             default:
-                this._s.pipe(this._txtStream()).pipe(listener);
+                _ns = _ns.pipe(this._txtStream());
             break;
         }
+
+        _ns.pipe(listener);
     },
 
 

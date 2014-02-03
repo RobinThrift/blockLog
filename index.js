@@ -1,4 +1,5 @@
-var es = require('event-stream');
+var es = require('event-stream'),
+    _  = require('lodash');
 
 var blockLog = function(name) {
 

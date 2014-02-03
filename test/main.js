@@ -65,7 +65,7 @@ describe('blockLog logging lib – ', function() {
             log.addMap(function(data, cb) {
                 data.msg += 10;
                 cb(null, data);
-            }, 'plain');
+            });
 
             ws.once('finish', function() {
                 var fixt = '[INFO] 20\n',

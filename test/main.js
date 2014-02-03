@@ -32,7 +32,7 @@ describe('blockLog logging lib – ', function() {
             });
 
             ws.once('finish', function() {
-                var fixt = fs.readFileSync('test/fixtures/filefixt.txt', {encoding: 'utf8'}),
+                var fixt = '{"level":"info","msg":"test"}',
                     res  = fs.readFileSync('test/fixtures/filetest.txt', {encoding: 'utf8'});
 
                 res.should.be.equal(fixt);

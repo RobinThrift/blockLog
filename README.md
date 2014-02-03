@@ -108,9 +108,9 @@ The internal method used to log to the stream. Accepts a log level and an array 
 
 - [Hapi](http://spumko.github.io/) compatible
 - [Koa.js](http://koajs.com/) compatible
-- Maps/Filters
 - custom formatters
 - unpipe?
+- log rotation
 
 
 ---

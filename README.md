@@ -97,10 +97,36 @@ Logs the parameters to the stream and marks them as info level logs.
 ####`error(msg...)`
 Logs the parameters to the stream and marks them as info level logs.
 
-
 ####`log(level, msgs)`
 The internal method used to log to the stream. Accepts a log level and an array of log messages.
 
+
+####`setPlainFormat(fn)`
+Replace the default format for the plain text output. The function takes one parameter, which will be the log data: log level and message.  
+**Example:**  
+```js
+log.setPlainFormat(function(data) {
+    return '|' + data.level + '| -> ' + JSON.stringify(data.msg) + '\n';
+});  
+```
+
+####`addMap(mapFn, opts)`
+Add a map to transform the log data. The `mapFn` will be passed to [`event-stream`](https://github.com/dominictarr/event-stream#map-asyncfunction)'s `map` function, so each function will get two parameters, the data and a callback that must be called.  
+  
+`opts` can hold the following keys:
+|key|default|description|
+|:--|:------|:----------|
+|type|'all'|To which type of log output should this map apply, like 'json' or 'plain'|
+|levels|'all'|Either 'all' or an array of log levels the map should apply, e. g. ['info', 'error']|
+
+
+**Example:**  
+```js
+log.addMap(function(data, cb) {
+    data.msg += ' (transformed)';
+    cb(null, data);
+}); 
+```
 
 ---
 

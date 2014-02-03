@@ -8,10 +8,24 @@ var blockLog = function(name) {
     this._attached = {};
     this._maps = [];
 
+    this._plainFormat = function(data) {
+        return '[' + data.level.toUpperCase() + '] ' + JSON.stringify(data.msg) + '\n';
+    };
+
 };
 
 
 blockLog.prototype = {
+
+    setPlainFormat: function(fn) {
+        this._s = es.through();
+        
+        this._plainFormat = fn;
+
+        _.each(this._attached, function(_s) {
+            this.attach(_s.name, _s.stream, _s);
+        }.bind(this));
+    },
 
     _jsonStream: es.stringify, 
 
@@ -26,14 +40,10 @@ blockLog.prototype = {
         });
     },
 
-    plainFormat: function(data) {
-        return '[' + data.level.toUpperCase() + '] ' + JSON.stringify(data.msg) + '\n';
-    },
-
     _txtStream: function () { 
         var self = this;
         return es.map(function(data, cb) { 
-            cb(null, self.plainFormat(data));
+            cb(null, self._plainFormat(data));
         });
     },
 
@@ -88,7 +98,7 @@ blockLog.prototype = {
             }
         });
 
-        
+
         switch (type) {
             case 'json':
                 _ns = _ns.pipe(this._jsonStream());

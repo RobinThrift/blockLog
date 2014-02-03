@@ -82,6 +82,36 @@ describe('blockLog logging lib – ', function() {
 
         });
 
+        it('custom plain formatter', function(done) {
+
+            fs.writeFileSync('test/fixtures/formattest.txt', '');
+
+            var log = new blockLog('custom-formatter-log-stream'),
+                ws = fs.createWriteStream('test/fixtures/formattest.txt', {encoding: 'utf8'});
+
+            log.setPlainFormat(function(data) {
+                return JSON.stringify(data.msg);
+            });
+
+            log.attach('testFile', ws, {
+                type: 'plain'
+            });
+
+            ws.once('finish', function() {
+                var fixt = '"world"',
+                    res  = fs.readFileSync('test/fixtures/formattest.txt', {encoding: 'utf8'});
+
+                res.should.be.equal(fixt);
+                done();
+            });
+
+            log.info('world');
+
+            ws.end();
+
+
+        });
+
     });
 
 

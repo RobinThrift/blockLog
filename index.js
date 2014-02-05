@@ -19,7 +19,7 @@ blockLog.prototype = {
 
     setPlainFormat: function(fn) {
         this._s = es.through();
-        
+
         this._plainFormat = fn;
 
         _.each(this._attached, function(_s) {
@@ -55,7 +55,10 @@ blockLog.prototype = {
         _.each(msgs, function(msg) {
             this._write({
                 level: level,
-                msg: msg
+                msg: msg,
+                time: moment().unix(),
+                uptime: process.uptime(),
+                pid: process.pid
             });
         }.bind(this));
     },

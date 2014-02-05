@@ -27,12 +27,19 @@ describe('blockLog logging lib – ', function() {
             var log = new blockLog('file-log-stream'),
                 ws = fs.createWriteStream('test/fixtures/filetest.txt', {encoding: 'utf8'});
 
+            log.addMap(function(data, cb) {
+                data.time = '';
+                data.pid = '';
+                data.uptime = 0;
+                cb(null, data)
+            });
+
             log.attach('testFile', ws, {
                 type: 'json'
             });
 
             ws.once('finish', function() {
-                var fixt = '{"level":"info","msg":"test"}\n',
+                var fixt = '{"level":"info","msg":"test","time":"","uptime":0,"pid":""}\n',
                     res  = fs.readFileSync('test/fixtures/filetest.txt', {encoding: 'utf8'});
 
                 res.should.be.equal(fixt);

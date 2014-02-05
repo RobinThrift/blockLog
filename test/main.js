@@ -115,6 +115,23 @@ describe('blockLog logging lib – ', function() {
             log.info('world');
 
             ws.end();
+        });
+
+        it('custom endpoints', function(done) {
+
+            var log = new blockLog('custom-endpoint-log-stream'),
+                ep  = log.createEndpoint(function(data) {
+                    data.should.be.equal('[INFO] "test"\n');
+                    done();
+                });
+
+            log.attach('endpoint', ep);
+
+            log.info('test');
+
+        });
+
+
 
 
         });

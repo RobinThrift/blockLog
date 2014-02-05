@@ -140,6 +140,9 @@ blockLog.prototype = {
 
     },
 
+
+    createEndpoint: es.map,
+
     express: function() {
 
         var self = this;

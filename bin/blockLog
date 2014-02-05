@@ -1,0 +1,21 @@
+#!/usr/bin/env node
+
+var blockLog = require('../'),
+    fs       = require('fs'),
+    log      = new blockLog('all'),
+    fStream  = fs.createWriteStream('out.log', {encoding: 'utf8'});
+
+log.setPlainFormat(function(data) {
+    return data.msg;
+});
+
+process.stdin.on('data', function(data) {
+    log.info(data.toString());
+});
+
+log.attach('stdout', process.stdout);
+log.attach('stderr', process.stderr);
+log.attach('logfile', fStream);
+
+
+

@@ -1,6 +1,6 @@
-var should = require('should'),
-    blockLog    = require('../'),
-    fs     = require('fs');
+var should   = require('should'),
+    blockLog = require('../'),
+    fs       = require('fs');
 
 require('mocha');
 
@@ -132,7 +132,32 @@ describe('blockLog logging lib – ', function() {
         });
 
 
+        it('log rotation', function(done) {
 
+            fs.writeFileSync('test/fixtures/rotationtest.txt', '');
+
+            var log = new blockLog('custom-formatter-log-stream'),
+                ws = fs.createWriteStream('test/fixtures/rotationtest.txt', {encoding: 'utf8'});
+
+            ws.on('end', function() {
+                done();
+            });
+
+
+            log.attach('rotating-file', ws, {
+                type: 'plain',
+                rotation: {
+                    path: 'test/fixtures/rotationtest.txt',
+                    format: '.YYYY-MM-DD-ss',
+                    period: '1s',
+                    afterRotate: function(newPath, now) {
+                        done();
+                        fs.unlinkSync(newPath);
+                    }
+                }
+            });
+
+            log.info('rotate me!');
 
         });
 

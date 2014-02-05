@@ -1,5 +1,7 @@
-var es = require('event-stream'),
-    _  = require('lodash');
+var es      = require('event-stream'),
+    _       = require('lodash'),
+    fs      = require('fs'),
+    moment  = require('moment');
 
 var blockLog = function(name) {
 
@@ -79,13 +81,15 @@ blockLog.prototype = {
         var o      = opts || {},
             type   = o.type || 'plain',
             levels = o.levels || 'all',
+            rot    = o.rotation || false,
             _ns;
 
         this._attached[name] = {
             name: name,
             stream: listener,
             type: type,
-            levels: levels
+            levels: levels,
+            rotation: rot
         };
 
 
@@ -110,6 +114,10 @@ blockLog.prototype = {
             default:
                 _ns = _ns.pipe(this._txtStream());
             break;
+        }
+
+        if (rot) {
+            this._rotate(name);
         }
 
         _ns.pipe(listener);
@@ -142,6 +150,70 @@ blockLog.prototype = {
 
 
     createEndpoint: es.map,
+
+
+    _rotate: function(name) {
+        var self = this,
+            _st  = this._attached[name],
+            _t   = this._parsePeriod(_st.rotation.period);
+
+        _st._rotate = function() {
+            var newPath = _st.rotation.path + moment().format(_st.rotation.format);
+
+            _st.stream.close();
+
+            fs.rename(_st.rotation.path, newPath, function() {
+                _st.stream = fs.createWriteStream(_st.rotation.path, {encoding: 'utf8'});
+                self.attach(name, _st.stream, _st);
+                if (_.isFunction(_st.rotation.afterRotate)) {
+                    _st.rotation.afterRotate(newPath, moment());
+                }
+            });
+        }
+
+        _st.timeout = setTimeout(_st._rotate, moment().add(_t.unit, _t.amount).valueOf() - moment().valueOf());
+
+    },
+
+    _parsePeriod: function(period) {
+        var _p  = /([0-9]+)(d|s|m|y|w|h)/.exec(period),
+            res = {};
+
+        res.amount = _p[1];
+
+        switch (_p[2]) {
+            case 'seconds':
+            case 's':
+                res.unit = 'seconds';
+            break;
+            case 'minutes':
+            case 'm':
+                res.unit = 'minutes';
+            break;
+            case 'hours':
+            case 'h':
+                res.unit = 'hours';
+            break;
+            case 'days':
+            case 'd':
+                res.unit = 'days';
+            break;
+            case 'weeks':
+            case 'w':
+                res.unit = 'weeks';
+            break;
+            case 'months':
+            case 'M':
+                res.unit = 'months';
+            break;
+            case 'years':
+            case 'y':
+                res.unit = 'years';
+            break;
+        }
+
+        return res;
+    },  
 
     express: function() {
 

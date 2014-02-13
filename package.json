@@ -15,7 +15,8 @@
     "logging",
     "log",
     "stream",
-    "express"
+    "express",
+    "rotation"
   ],
   "author": "Robin Thrift",
   "license": "MIT",

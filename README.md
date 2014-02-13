@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/RobinThrift/blockLog.png?branch=master)](https://travis-ci.org/RobinThrift/blockLog)
 [![NPM version](https://badge.fury.io/js/blocklog.png)](http://badge.fury.io/js/blocklog)
 #blockLog
-A simple and adaptable stream-based logging lib for node.js
+A simple and adaptable stream-based logging lib for node.js, with support for multiple outputs and log rotation.
 
 
 - [Installation](#installation)
@@ -114,10 +114,12 @@ log.setPlainFormat(function(data) {
 Add a map to transform the log data. The `mapFn` will be passed to [`event-stream`](https://github.com/dominictarr/event-stream#map-asyncfunction)'s `map` function, so each function will get two parameters, the data and a callback that must be called.  
   
 `opts` can hold the following keys:
+
 |key|default|description|
 |:--|:------|:----------|
 |type|'all'|To which type of log output should this map apply, like 'json' or 'plain'|
 |levels|'all'|Either 'all' or an array of log levels the map should apply, e. g. ['info', 'error']|
+
 
 
 **Example:**  
@@ -127,6 +129,60 @@ log.addMap(function(data, cb) {
     cb(null, data);
 }); 
 ```
+
+
+####`createEndpoint(fn)`
+If you don't want to deal with streams you can simply create an endpoint to pipe to. This method takes a function that will be executed for each logged item.
+```js
+var ep  = log.createEndpoint(function(data) {
+        mail(data).to("email");
+        // or do anything else you want to do with your data here
+    });
+
+log.attach('endpoint', ep);
+``` 
+
+
+###Log rotation
+`blockLog` supports log roation for file based streams. Create a writeable file stream and attach it to the log stream. By passing the `rotation` option you can specify the log rotation.
+
+|key|description|
+|:--|:----------|
+|path|The path to the file that is being rotated. The old logs will have the same name with the `format` appended|
+|format|The way the time will be formated when the old log file is created|
+|period|A string made up of a number and a unit|
+|afterRotate|A callback that will be fired after the log rotation has created a new file. It will be passed the path to the new file and the timestamp at which it was created|
+
+####Options for the period:
+|unit|description|
+|:--|:----------|
+|s|Seconds|
+|m|Minutes|
+|h|Hours|
+|d|Days|
+|w|Weeks|
+|M|Months|
+|y|Years|
+
+
+```js
+var ws = fs.createWriteStream('logs/rotating.log', {encoding: 'utf8'});
+
+log.attach('rotating-file', ws, {
+    type: 'plain',
+    rotation: {
+        path: 'logs/rotating.log',
+        format: '.YYYY-MM-DD-ss',
+        period: '1d',
+        afterRotate: function(newPath, now) {
+            fs.unlinkSync(newPath);
+        }
+    }
+});
+
+```
+> NOTE: new file streams are created using utf8 encoding
+
 
 ---
 

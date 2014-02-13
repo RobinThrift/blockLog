@@ -135,7 +135,6 @@ log.addMap(function(data, cb) {
 - [Hapi](http://spumko.github.io/) compatible
 - [Koa.js](http://koajs.com/) compatible
 - unpipe?
-- log rotation
 
 
 ---
